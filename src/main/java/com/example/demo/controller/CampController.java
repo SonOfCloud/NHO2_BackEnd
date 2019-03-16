@@ -13,18 +13,20 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
+import javax.validation.Valid;
 import java.util.List;
 import java.util.stream.Collectors;
 
 @RestController
 @CrossOrigin
-@Api(tags = "CampController", description = "add camp or query camps")
+@Api(tags = "CampController", description = "camp operation")
 public class CampController {
 
     @Autowired
     private CampService campService;
 
     private CampMapper campMapper = Mappers.getMapper(CampMapper.class);
+
 
     @RequestMapping(path = {"camps"}, method = RequestMethod.GET)
     @ApiOperation(value="getCamps")
@@ -33,7 +35,7 @@ public class CampController {
         Result<List<CampResponseDto>> result = new Result<>();
         try {
             List<Camp> camps = campService.getCampList();
-            campDTOs = camps.stream().map(campMapper::convertCampResponseDto).collect(Collectors.toList());
+            campDTOs = camps.stream().map(campMapper::convertCampToCampResponseDto).collect(Collectors.toList());
             result.setData(campDTOs);
         } catch (Exception e) {
             result.setError(e.getMessage());
@@ -43,7 +45,7 @@ public class CampController {
 
     @RequestMapping(path = {"camp"}, method = RequestMethod.POST)
     @ApiOperation(value="addCamp")
-    public Result<Object> createCamp(@RequestBody CampRequestDto requestDto, HttpServletResponse response) {
+    public Result<Object> createCamp(@RequestBody @Valid CampRequestDto requestDto, HttpServletResponse response) {
         Result<Object> result = new Result<>();
         Camp camp = campMapper.convertRequestDtoToCamp(requestDto);
         try {

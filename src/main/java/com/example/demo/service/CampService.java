@@ -6,7 +6,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Component;
 
-import java.util.Date;
 import java.util.List;
 
 @Component
@@ -26,8 +25,6 @@ public class CampService {
     }
 
     public Camp createCamp(Camp camp) {
-        camp.setCreatedAt(new Date());
-        camp.setUpdatedAt(new Date());
         return campRepository.save(camp);
     }
 }

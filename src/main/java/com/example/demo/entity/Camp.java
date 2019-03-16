@@ -2,6 +2,7 @@ package com.example.demo.entity;
 
 import lombok.*;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -26,10 +27,12 @@ public class Camp {
 
     private String createdBy;
 
+    @Column(insertable = false, updatable = false)
     private Date createdAt;
 
     private String updatedBy;
 
+    @Column(insertable = false)
     private Date updatedAt;
 
 

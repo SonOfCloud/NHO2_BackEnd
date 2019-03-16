@@ -8,7 +8,7 @@ import org.mapstruct.Mapper;
 @Mapper
 public interface CampMapper {
 
-    CampResponseDto convertCampResponseDto(Camp camp);
+    CampResponseDto convertCampToCampResponseDto(Camp camp);
 
     Camp convertRequestDtoToCamp(CampRequestDto dto);
 }
