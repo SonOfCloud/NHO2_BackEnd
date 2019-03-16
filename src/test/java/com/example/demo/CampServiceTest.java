@@ -4,6 +4,7 @@ import com.example.demo.entity.Camp;
 import com.example.demo.jpa.CampRepository;
 import com.example.demo.service.CampService;
 import org.junit.Assert;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
@@ -24,10 +25,14 @@ public class CampServiceTest {
 
     private CampService campService;
 
+    @Before
+    public void setUp(){
+        campService = new CampService(campRepository);
+    }
+
 
     @Test
     public void ShouldReturnAllCampsWhenGetCampList() {
-        campService = new CampService(campRepository);
         List<Camp> camps = new LinkedList<>();
         camps.add(Camp.builder().build());
         camps.add(Camp.builder().build());
@@ -38,7 +43,6 @@ public class CampServiceTest {
 
     @Test
     public void TestAdd(){
-        campService = new CampService(campRepository);
         campService.createCamp(Camp.builder().build());
         verify(campRepository, times(1)).save(any());
     }
