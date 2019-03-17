@@ -30,7 +30,7 @@ public class ControllerExceptionHandler {
         }
         else if(ex instanceof HttpMessageNotReadableException){
             result.put("data", null);
-            result.put("error", "post请求body体不能为空");
+            result.put("error", "post请求body体不正确");
             response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
             return result;
         }

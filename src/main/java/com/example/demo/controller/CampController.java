@@ -41,11 +41,22 @@ public class CampController {
 
     @RequestMapping(path = {"camp"}, method = RequestMethod.POST)
     @ApiOperation(value="addCamp")
-    public Result<Object> createCamp(@RequestBody @Valid CampRequestDto requestDto, HttpServletResponse response) {
-        Result<Object> result = new Result<>();
+    public Result<CampResponseDto> createCamp(@RequestBody @Valid CampRequestDto requestDto, HttpServletResponse response) {
+        Result<CampResponseDto> result = new Result<>();
         Camp camp = campMapper.convertRequestDtoToCamp(requestDto);
-        campService.createCamp(camp);
+        Camp addResultCamp = campService.createCamp(camp);
+        CampResponseDto campResponseDto = campMapper.convertCampToCampResponseDto(addResultCamp);
+        result.setData(campResponseDto);
         response.setStatus(HttpServletResponse.SC_CREATED);
+        return result;
+    }
+
+    @RequestMapping(path = {"camp/{id}"}, method = RequestMethod.DELETE)
+    @ApiOperation(value="deleteCamp")
+    public Result<String> deleteCamp(@PathVariable long id){
+        Result<String> result = new Result<>();
+        campService.deleteCamp(id);
+        result.setData("SUCCESS");
         return result;
     }
 }

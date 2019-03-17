@@ -27,4 +27,8 @@ public class CampService {
     public Camp createCamp(Camp camp) {
         return campRepository.save(camp);
     }
+
+    public void deleteCamp(long id) {
+        campRepository.deleteById(id);
+    }
 }
