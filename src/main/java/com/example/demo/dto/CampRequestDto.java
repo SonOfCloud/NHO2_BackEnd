@@ -14,6 +14,6 @@ public class CampRequestDto {
     private String title;
 
     @NotBlank(message = "训练营描述不能为空")
-    @Length(max = 1024, message = "训练营描述长度最长1024")
+    @Length(max = 300, message = "训练营描述长度最长300")
     private String description;
 }

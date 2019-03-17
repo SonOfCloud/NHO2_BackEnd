@@ -19,7 +19,7 @@ public class CampService {
     }
 
     public List<Camp> getCampList(){
-        Sort sort = new Sort(Sort.Direction.DESC, "updatedAt");
+        Sort sort = new Sort(Sort.Direction.DESC, "updatedAt", "id");
         List<Camp> camps = campRepository.findAll(sort);
         return camps;
     }
