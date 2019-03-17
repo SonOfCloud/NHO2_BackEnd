@@ -1,6 +1,7 @@
 package com.example.demo.aop;
 
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -27,8 +28,14 @@ public class ControllerExceptionHandler {
             response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
             return result;
         }
+        else if(ex instanceof HttpMessageNotReadableException){
+            result.put("data", null);
+            result.put("error", "post请求body体不能为空");
+            response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+            return result;
+        }
         result.put("data", null);
-        result.put("error", "Internal server error");
+        result.put("error", "内部服务端异常");
         response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
         return result;
     }
