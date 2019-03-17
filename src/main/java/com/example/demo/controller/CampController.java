@@ -33,13 +33,9 @@ public class CampController {
     public Result<List<CampResponseDto>> getCampList() {
         List<CampResponseDto> campDTOs;
         Result<List<CampResponseDto>> result = new Result<>();
-        try {
-            List<Camp> camps = campService.getCampList();
-            campDTOs = camps.stream().map(campMapper::convertCampToCampResponseDto).collect(Collectors.toList());
-            result.setData(campDTOs);
-        } catch (Exception e) {
-            result.setError(e.getMessage());
-        }
+        List<Camp> camps = campService.getCampList();
+        campDTOs = camps.stream().map(campMapper::convertCampToCampResponseDto).collect(Collectors.toList());
+        result.setData(campDTOs);
         return result;
     }
 
@@ -48,12 +44,7 @@ public class CampController {
     public Result<Object> createCamp(@RequestBody @Valid CampRequestDto requestDto, HttpServletResponse response) {
         Result<Object> result = new Result<>();
         Camp camp = campMapper.convertRequestDtoToCamp(requestDto);
-        try {
-            campService.createCamp(camp);
-        } catch (Exception e) {
-            result.setError(e.getMessage());
-        }
-
+        campService.createCamp(camp);
         response.setStatus(HttpServletResponse.SC_CREATED);
         return result;
     }
