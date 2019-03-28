@@ -7,6 +7,7 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
+
 import javax.servlet.http.HttpServletResponse;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -17,35 +18,34 @@ import java.util.Map;
 public class ControllerExceptionHandler {
 
 
-    @ExceptionHandler(Exception.class)
+    @ExceptionHandler(MethodArgumentNotValidException.class)
     @ResponseBody
-    public Map<String,Object> handlerUserNotExistException(Exception ex, HttpServletResponse response){
+    public Map<String, Object> handlerUserNotExistException(MethodArgumentNotValidException ex, HttpServletResponse response) {
         log.error("Exception detail:{}", ex);
-        Map<String,Object> result=new HashMap<>();
-        if(ex instanceof MethodArgumentNotValidException){
-            result.put("data", null);
-            result.put("error", argumentValidErrorMsg((MethodArgumentNotValidException) ex));
-            response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-            return result;
-        }
-        else if(ex instanceof HttpMessageNotReadableException){
-            result.put("data", null);
-            result.put("error", "post请求body体不正确");
-            response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-            return result;
-        }
+        Map<String, Object> result = new HashMap<>();
         result.put("data", null);
-        result.put("error", "内部服务端异常");
-        response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+        result.put("error", argumentValidErrorMsg(ex));
+        response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
         return result;
     }
 
-    private String argumentValidErrorMsg(MethodArgumentNotValidException ex){
+    @ExceptionHandler(HttpMessageNotReadableException.class)
+    @ResponseBody
+    public Map<String, Object> handlerUserNotExistException(HttpMessageNotReadableException ex, HttpServletResponse response) {
+        log.error("Exception detail:{}", ex);
+        Map<String, Object> result = new HashMap<>();
+        result.put("data", null);
+        result.put("error", "post请求body体不正确");
+        response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+        return result;
+    }
+
+    private String argumentValidErrorMsg(MethodArgumentNotValidException ex) {
         Iterator iterator = ex.getBindingResult().getAllErrors().iterator();
 
         StringBuilder errorMsg = new StringBuilder();
-        while(iterator.hasNext()) {
-            ObjectError error = (ObjectError)iterator.next();
+        while (iterator.hasNext()) {
+            ObjectError error = (ObjectError) iterator.next();
             errorMsg.append("[").append(error.getDefaultMessage()).append("] ");
         }
         return errorMsg.toString();
